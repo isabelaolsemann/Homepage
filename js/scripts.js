@@ -43,57 +43,76 @@ function currentDate () {
 
 // QUOTES
 function updateQuote() {
-    const storedDate = localStorage.getItem("quoteData");
-    const storedDataJson = JSON.parse(storedDate);
-    const currentDataString = currentDate();
-    const quoteText = document.querySelector(".quote");
-    const quoteAuthor = document.querySelector(".writer");
+    const storedData = localStorage.getItem("quoteData");
+    const currentDateValue = currentDate();
 
-    if (storedDataJson.date !== currentDataString) {
-        
-         // Quotes 
-        const quotes = [
-        {
-        quote: "Believe you can and you are halfway there.",
-        author: "-Theodore Roosevelt",
-        },
-        {
-        quote: "The best way to predict the future is to create it.",
-        author: "- Abraham Lincoln",
-        },
-        {
-        quote: "Happiness is not by chance, but by choice.",
-        author: " - Jim Rohn",
-        },
-        {
-        quote:"You are never too old to set another goal or to dream a new dream",
-        author: "-C.S. Lewis",
-        },
-        {
-        quote: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
-        author: "-Nelson Mandela",
-        },
-        {
-        quote: "The purpose of our lives is to be happy.",
-        author: "- Dalai Lama",
-        },
-    ];
-    
-        
-        const index = Math.floor(Math.random() * quotes.length);
-
-        quoteText.textContent = quotes[index].quote;
-        quoteAuthor.textContent = quotes[index].author;
-
-        localStorage.setItem("quoteData", JSON.stringify(
-            {
-                "date": currentDataString, 
-                "frasedodia":quotes[index],
-            }));
-    }else{
-        quoteText.textContent = storedDataJson.frasedodia.quote;
-        quoteAuthor.textContent = storedDataJson.frasedodia.author;
+    let storedDataJson = {};
+    if (storedData) {
+        storedDataJson = JSON.parse(storedData);
     }
-};
+
+    if (!storedDataJson.date || storedDataJson.date !== currentDateValue) {
+        const quotes = [
+            {
+                quote: "Believe you can and you are halfway there.",
+                author: "- Theodore Roosevelt",
+            },
+            {
+                quote: "The best way to predict the future is to create it.",
+                author: "- Abraham Lincoln",
+            },
+            {
+                quote: "Happiness is not by chance, but by choice.",
+                author: "- Jim Rohn",
+            },
+            {
+                quote: "You are never too old to set another goal or to dream a new dream",
+                author: "- C.S. Lewis",
+            },
+            {
+                quote: "The greatest glory in living lies not in never falling, but in rising every time we fall.",
+                author: "- Nelson Mandela",
+            },
+            {
+                quote: "The purpose of our lives is to be happy.",
+                author: "- Dalai Lama",
+            },
+        ];
+
+        const index = Math.floor(Math.random() * quotes.length);
+        const selectedQuote = quotes[index];
+
+        const quoteText = selectedQuote.quote;
+        const quoteAuthor = selectedQuote.author;
+
+        SetNewQuote(selectedQuote, currentDateValue);
+
+        displayQuote(quoteText, quoteAuthor);
+    } else {
+        ReadQuoteSaved(storedDataJson);
+    }
+}
+
+function SetNewQuote(quote, date) {
+    localStorage.setItem("quoteData", JSON.stringify({
+        "date": date,
+        "frasedodia": quote,
+    }));
+}
+
+function ReadQuoteSaved(quoteJson) {
+    const quoteText = quoteJson.frasedodia.quote;
+    const quoteAuthor = quoteJson.frasedodia.author;
+
+    displayQuote(quoteText, quoteAuthor);
+}
+
+function displayQuote(quote, author) {
+    const quoteTextElement = document.querySelector(".quote");
+    const quoteAuthorElement = document.querySelector(".writer");
+
+    quoteTextElement.textContent = quote;
+    quoteAuthorElement.textContent = author;
+}
 
 updateQuote();
