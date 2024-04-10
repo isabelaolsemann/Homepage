@@ -11,6 +11,7 @@ html, body {
 body {
     background-image: url(../img/bg-image.jpg);
     background-size: cover;
+    overflow-y: hidden;
 }
 
 .content {
